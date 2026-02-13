@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURUM STUDIO | Premium Salon & Hair Artistry Rajagiriya</title>
-    <meta name="description" content="Visit Aurum Studio in Rajagiriya for high-quality hair styling, skin care, and bridal makeup. Book your appointment today for a premium beauty experience.">
+    <meta name="description" content="Professional hair, skin, and beauty services at 121, 1 Parliament Rd, Rajagiriya. Experience premium beauty standards in Sri Lanka.">
     
-    <!-- Open Graph / Social Media -->
+    <!-- SEO & Performance -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aurumstudio.lk/">
     <meta property="og:title" content="AURUM STUDIO | Luxury Salon Rajagiriya">
-    <meta property="og:description" content="Professional hair, skin, and beauty services at 121, 1 Parliament Rd, Rajagiriya.">
     <meta property="og:image" content="https://i.ibb.co/SwZsqDFb/hero-bg.jpg">
+    <link rel="canonical" href="https://aurumstudio.lk/">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,51 +21,59 @@
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            cursor: none;
+            background-color: #2E2E2E;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         h1, h2, h3, .font-serif {
             font-family: 'Playfair+Display', serif;
         }
-        @media (max-width: 768px) {
-            body { cursor: auto; }
+        /* Desktop Cursor Only */
+        @media (min-width: 769px) {
+            body { cursor: none; }
         }
-        html {
-            scroll-behavior: smooth;
+        /* Smooth page entrance */
+        #root {
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
         }
-        /* Premium selection color */
+        #root.loaded {
+            opacity: 1;
+        }
+        /* Selection & Scrollbars */
         ::selection {
             background: #D4AF37;
             color: #2E2E2E;
         }
-        /* Golden Shimmer Animation */
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .shimmer-text {
-            background: linear-gradient(90deg, #D4AF37 25%, #FFF 50%, #D4AF37 75%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 4s linear infinite;
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 10px;
         }
     </style>
     <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
-      }
-    }
-    </script>
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@1.4.1",
+    "lucide-react": "https://esm.sh/lucide-react@0.469.0",
+    "framer-motion": "https://esm.sh/framer-motion@11.15.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
 </head>
-<body class="bg-[#2E2E2E] text-white overflow-x-hidden">
+<body class="bg-[#2E2E2E]">
     <div id="root"></div>
 </body>
 </html>

@@ -1,8 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
 const SYSTEM_INSTRUCTION = `
 You are the assistant for AURUM STUDIO, a premium salon in Rajagiriya, Sri Lanka.
 Your tone is friendly, polite, and helpful.
@@ -24,6 +22,12 @@ RULES:
 
 export async function getChatResponse(prompt: string) {
   try {
+    const apiKey = process.env.API_KEY;
+    if (!apiKey) {
+      throw new Error("API Key not found");
+    }
+    
+    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
@@ -33,9 +37,10 @@ export async function getChatResponse(prompt: string) {
         temperature: 0.7,
       },
     });
+    
     return response.text || "I'm sorry, I can't answer that right now. Please call us at +94 77 751 2222.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Thank you for message. Please call our studio at +94 77 751 2222 for help.";
+    return "Thank you for your message. Please call our studio at +94 77 751 2222 for immediate help.";
   }
 }

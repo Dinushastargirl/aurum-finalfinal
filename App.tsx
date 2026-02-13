@@ -14,14 +14,6 @@ import { FRESHA_LINK, GALLERY, BLOG_POSTS, REVIEWS, GOOGLE_REVIEWS_LINK } from '
 import { Star, ExternalLink, ArrowRight } from 'lucide-react';
 
 const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> = ({ currentPage, onNavigate }) => {
-  const navItems: { id: Page; label: string }[] = [
-    { id: 'about', label: 'About Us' },
-    { id: 'team', label: 'Our Team' },
-    { id: 'gallery', label: 'Gallery' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Contact Us' }
-  ];
-
   return (
     <motion.nav 
       initial={{ y: -50, opacity: 0 }}
@@ -41,16 +33,16 @@ const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> 
       </div>
 
       <div className="hidden lg:flex gap-10 pointer-events-auto items-center">
-        {navItems.map(item => (
+        {['about', 'team', 'gallery', 'blog', 'contact'].map((id) => (
           <button
-            key={item.id}
-            onClick={() => onNavigate(item.id)}
+            key={id}
+            onClick={() => onNavigate(id as Page)}
             className={`text-[10px] uppercase tracking-[0.4em] transition-all duration-300 relative group ${
-              currentPage === item.id ? 'text-[#D4AF37]' : 'text-white/60 hover:text-white'
+              currentPage === id ? 'text-[#D4AF37]' : 'text-white/60 hover:text-white'
             }`}
           >
-            {item.label}
-            <span className={`absolute -bottom-2 left-0 w-0 h-[1px] bg-[#D4AF37] transition-all duration-300 group-hover:w-full ${currentPage === item.id ? 'w-full' : ''}`} />
+            {id.replace('-', ' ')}
+            <span className={`absolute -bottom-2 left-0 w-0 h-[1px] bg-[#D4AF37] transition-all duration-300 group-hover:w-full ${currentPage === id ? 'w-full' : ''}`} />
           </button>
         ))}
       </div>
@@ -76,11 +68,11 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
       <p className="text-white/40 text-[10px] uppercase tracking-[0.5em] mb-12">1 Parliament Rd, Rajagiriya</p>
       <div className="flex flex-wrap justify-center gap-10 mb-12 text-[10px] uppercase tracking-[0.5em] text-white/40">
         {['about', 'team', 'gallery', 'blog', 'contact'].map(p => (
-          <button key={p} onClick={() => onNavigate(p as Page)} className="hover:text-[#D4AF37] transition-colors">{p.replace('-', ' ')}</button>
+          <button key={p} onClick={() => onNavigate(p as Page)} className="hover:text-[#D4AF37] transition-colors uppercase tracking-widest">{p.replace('-', ' ')}</button>
         ))}
       </div>
       <p className="text-white/20 text-[9px] tracking-[0.4em] uppercase">
-        © {new Date().getFullYear()} Aurum Studio. Developed for Premium Excellence.
+        © {new Date().getFullYear()} Aurum Studio. High Quality Beauty.
       </p>
     </div>
   </footer>
@@ -88,14 +80,24 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage]);
+    setMounted(true);
+    document.getElementById('root')?.classList.add('loaded');
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentPage, mounted]);
 
   const handleNavigate = (page: Page) => {
     setCurrentPage(page);
   };
+
+  if (!mounted) return <div className="min-h-screen bg-[#2E2E2E]" />;
 
   const renderPage = () => {
     switch(currentPage) {
@@ -110,68 +112,63 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#2E2E2E] selection:bg-[#D4AF37] selection:text-[#2E2E2E]">
+    <div className="relative min-h-screen bg-[#2E2E2E]">
       <CustomCursor />
-      
       <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
 
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPage}
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
         >
           {renderPage()}
           
           {currentPage === 'home' && (
             <>
-              {/* Home - About Section */}
               <div className="py-20 border-t border-white/5">
                 <About />
               </div>
 
-              {/* Home - Gallery Highlight */}
               <div className="py-24 bg-[#252525]">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="flex justify-between items-end mb-12">
                     <div>
                       <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Portfolio</h2>
-                      <h3 className="text-4xl font-serif">Our Best Styles</h3>
+                      <h3 className="text-4xl font-serif">Featured Work</h3>
                     </div>
                     <button 
                       onClick={() => handleNavigate('gallery')}
                       className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] flex items-center gap-2 group border-b border-[#D4AF37]/30 pb-1"
                     >
-                      Explore Gallery <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      View More <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {GALLERY.slice(0, 4).map((img, idx) => (
                       <motion.div 
                         key={idx} 
-                        whileHover={{ y: -10 }}
+                        whileHover={{ y: -5 }}
                         className="aspect-square rounded-lg overflow-hidden shadow-2xl"
                       >
-                        <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
+                        <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" />
                       </motion.div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* Home - Team Section */}
               <div className="py-20 bg-black/10">
                 <Team />
               </div>
 
-              {/* Home - Blog Highlight */}
               <div className="py-24 bg-[#2E2E2E]">
                 <div className="max-w-7xl mx-auto px-6">
                    <div className="flex justify-between items-end mb-12">
                     <div>
-                      <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Latest</h2>
+                      <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Journal</h2>
                       <h3 className="text-4xl font-serif">The Beauty Blog</h3>
                     </div>
                     <button 
@@ -188,8 +185,8 @@ const App: React.FC = () => {
                         className="group cursor-pointer" 
                         onClick={() => handleNavigate('blog')}
                       >
-                        <div className="aspect-[16/10] mb-6 overflow-hidden rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500 shadow-xl">
-                          <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div className="aspect-[16/10] mb-6 overflow-hidden rounded-sm bg-[#3A3A3A]">
+                          <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                         </div>
                         <h4 className="text-xl font-serif mb-3 text-white group-hover:text-[#D4AF37] transition-colors">{post.title}</h4>
                         <p className="text-white/40 text-sm line-clamp-2 font-light leading-relaxed">{post.excerpt}</p>
@@ -199,12 +196,11 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Home - Reviews Section */}
               <div className="py-24 bg-black/20">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="text-center mb-16">
                     <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Testimonials</h2>
-                    <h3 className="text-4xl md:text-5xl font-serif mb-6">Client Love</h3>
+                    <h3 className="text-4xl md:text-5xl font-serif mb-6">Client Experiences</h3>
                     <div className="flex justify-center gap-1.5">
                       {[...Array(5)].map((_, i) => <Star key={i} size={18} className="fill-[#D4AF37] text-[#D4AF37]" />)}
                     </div>
@@ -215,9 +211,8 @@ const App: React.FC = () => {
                         key={idx} 
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
                         viewport={{ once: true }}
-                        className="bg-[#3A3A3A] p-10 rounded-lg border border-white/5 shadow-2xl relative"
+                        className="bg-[#3A3A3A] p-10 rounded-lg border border-white/5 shadow-2xl"
                       >
                         <div className="flex gap-1 mb-6">
                           {[...Array(review.rating)].map((_, i) => <Star key={i} size={14} className="fill-[#D4AF37] text-[#D4AF37]" />)}
@@ -237,7 +232,7 @@ const App: React.FC = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-3 text-[#D4AF37] text-xs uppercase tracking-[0.3em] hover:text-white transition-all group"
                     >
-                      Verified Google Reviews <ExternalLink size={14} className="group-hover:translate-y-[-2px] transition-transform" />
+                      Google Business Reviews <ExternalLink size={14} className="group-hover:translate-y-[-2px] transition-transform" />
                     </a>
                   </div>
                 </div>

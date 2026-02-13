@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Paintbrush } from 'lucide-react';
 import { Splash } from '../types';
@@ -35,23 +35,25 @@ const SplashEffect: React.FC<{ x: number, y: number, onComplete: () => void }> =
 export const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [splashes, setSplashes] = useState<Splash[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    const handleCheck = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    handleCheck();
+    window.addEventListener('resize', handleCheck);
 
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
     const handleClick = (e: MouseEvent) => {
-      if (isMobile) return;
       setSplashes(prev => [...prev, { id: Date.now(), x: e.clientX, y: e.clientY }]);
     };
 
-    if (!isMobile) {
+    if (window.innerWidth > 768) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mousedown', handleClick);
     }
@@ -59,18 +61,18 @@ export const CustomCursor: React.FC = () => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleClick);
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', handleCheck);
     };
-  }, [isMobile]);
+  }, []);
 
-  if (isMobile) return null;
+  if (!isDesktop) return null;
 
   return (
     <>
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[10000] mix-blend-difference"
         animate={{ x: position.x - 16, y: position.y - 16 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 400, mass: 0.5 }}
+        transition={{ type: 'spring', damping: 30, stiffness: 450, mass: 0.4 }}
       >
         <Paintbrush className="w-full h-full text-white" />
       </motion.div>
