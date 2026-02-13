@@ -1,6 +1,4 @@
 
-"use client";
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BLOG_POSTS } from '../constants';
@@ -33,8 +31,6 @@ export const Blog: React.FC = () => {
                   src={post.image} 
                   alt={post.title} 
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                  loading="lazy"
-                  decoding="async"
                 />
                 <div className="absolute top-6 left-6 px-4 py-1 bg-[#D4AF37] text-[#2E2E2E] text-[10px] uppercase font-bold tracking-widest">
                   {post.category}

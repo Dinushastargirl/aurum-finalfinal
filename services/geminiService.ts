@@ -1,6 +1,8 @@
 
 import { GoogleGenAI } from "@google/genai";
 
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+
 const SYSTEM_INSTRUCTION = `
 You are the assistant for AURUM STUDIO, a premium salon in Rajagiriya, Sri Lanka.
 Your tone is friendly, polite, and helpful.
@@ -22,23 +24,15 @@ RULES:
 
 export async function getChatResponse(prompt: string) {
   try {
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-      console.error("Gemini API key is not configured.");
-      return "I'm currently resting. Please call us at +94 77 751 2222 for help.";
-    }
-
-    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      contents: prompt,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        maxOutputTokens: 150,
+        maxOutputTokens: 100,
         temperature: 0.7,
       },
     });
-
     return response.text || "I'm sorry, I can't answer that right now. Please call us at +94 77 751 2222.";
   } catch (error) {
     console.error("Gemini Error:", error);

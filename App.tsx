@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Hero } from './components/Hero';
@@ -90,29 +88,14 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    if (typeof document !== 'undefined') {
-      document.getElementById('root')?.classList.add('mounted');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mounted && typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [currentPage, mounted]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
   const handleNavigate = (page: Page) => {
     setCurrentPage(page);
   };
-
-  // Prevent SSR hydration mismatches which cause grey screens
-  if (!mounted) {
-    return <div className="min-h-screen bg-[#2E2E2E]" />;
-  }
 
   const renderPage = () => {
     switch(currentPage) {
@@ -171,13 +154,7 @@ const App: React.FC = () => {
                         whileHover={{ y: -10 }}
                         className="aspect-square rounded-lg overflow-hidden shadow-2xl"
                       >
-                        <img 
-                          src={img.url} 
-                          alt={img.alt} 
-                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-                          loading="lazy"
-                          decoding="async"
-                        />
+                        <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
                       </motion.div>
                     ))}
                   </div>
@@ -212,13 +189,7 @@ const App: React.FC = () => {
                         onClick={() => handleNavigate('blog')}
                       >
                         <div className="aspect-[16/10] mb-6 overflow-hidden rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500 shadow-xl">
-                          <img 
-                            src={post.image} 
-                            alt={post.title} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                            loading="lazy"
-                            decoding="async"
-                          />
+                          <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         </div>
                         <h4 className="text-xl font-serif mb-3 text-white group-hover:text-[#D4AF37] transition-colors">{post.title}</h4>
                         <p className="text-white/40 text-sm line-clamp-2 font-light leading-relaxed">{post.excerpt}</p>

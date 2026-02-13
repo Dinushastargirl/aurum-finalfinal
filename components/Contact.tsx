@@ -1,6 +1,4 @@
 
-"use client";
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react';
@@ -47,10 +45,10 @@ export const Contact: React.FC = () => {
             </div>
 
             <div className="mt-16 pt-12 border-t border-white/5 flex gap-8">
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Follow us on Instagram">
+              <a href="https://instagram.com" target="_blank" rel="noreferrer">
                 <Instagram className="text-white/40 hover:text-[#D4AF37] cursor-pointer transition-colors" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Follow us on Facebook">
+              <a href="https://facebook.com" target="_blank" rel="noreferrer">
                 <Facebook className="text-white/40 hover:text-[#D4AF37] cursor-pointer transition-colors" />
               </a>
             </div>
@@ -62,18 +60,18 @@ export const Contact: React.FC = () => {
             className="bg-[#3A3A3A] p-10 md:p-16 rounded-sm shadow-2xl border border-white/5"
           >
             <h4 className="text-2xl font-serif mb-8 text-center uppercase tracking-widest">Send a Message</h4>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6">
               <div className="space-y-2">
                 <label className="text-[10px] uppercase tracking-[0.3em] text-white/40">Full Name</label>
-                <input type="text" placeholder="John Doe" className="w-full bg-[#2E2E2E] border border-white/5 p-4 focus:border-[#D4AF37] outline-none transition-colors" />
+                <input type="text" className="w-full bg-[#2E2E2E] border border-white/5 p-4 focus:border-[#D4AF37] outline-none transition-colors" />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase tracking-[0.3em] text-white/40">Email Address</label>
-                <input type="email" placeholder="john@example.com" className="w-full bg-[#2E2E2E] border border-white/5 p-4 focus:border-[#D4AF37] outline-none transition-colors" />
+                <input type="email" className="w-full bg-[#2E2E2E] border border-white/5 p-4 focus:border-[#D4AF37] outline-none transition-colors" />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase tracking-[0.3em] text-white/40">Message</label>
-                <textarea rows={4} placeholder="Tell us what you're looking for..." className="w-full bg-[#2E2E2E] border border-white/5 p-4 focus:border-[#D4AF37] outline-none transition-colors"></textarea>
+                <textarea rows={4} className="w-full bg-[#2E2E2E] border border-white/5 p-4 focus:border-[#D4AF37] outline-none transition-colors"></textarea>
               </div>
               <button className="w-full py-5 bg-[#D4AF37] text-[#2E2E2E] font-bold uppercase tracking-[0.3em] hover:bg-white transition-colors duration-500">
                 Send Now

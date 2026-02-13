@@ -1,7 +1,5 @@
 
-"use client";
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Paintbrush } from 'lucide-react';
 import { Splash } from '../types';
@@ -37,38 +35,35 @@ const SplashEffect: React.FC<{ x: number, y: number, onComplete: () => void }> =
 export const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [splashes, setSplashes] = useState<Splash[]>([]);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const checkDevice = () => {
-      setIsEnabled(window.innerWidth > 768);
-    };
-
-    checkDevice();
-    window.addEventListener('resize', checkDevice);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
     const handleClick = (e: MouseEvent) => {
-      if (window.innerWidth <= 768) return;
+      if (isMobile) return;
       setSplashes(prev => [...prev, { id: Date.now(), x: e.clientX, y: e.clientY }]);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousedown', handleClick);
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousedown', handleClick);
+    }
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleClick);
-      window.removeEventListener('resize', checkDevice);
+      window.removeEventListener('resize', checkMobile);
     };
-  }, []);
+  }, [isMobile]);
 
-  if (!isEnabled) return null;
+  if (isMobile) return null;
 
   return (
     <>

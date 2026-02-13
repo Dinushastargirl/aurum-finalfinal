@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
@@ -46,8 +44,6 @@ export const Gallery: React.FC = () => {
                 src={img.url} 
                 alt={img.alt} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-                decoding="async"
               />
               <div className="absolute inset-0 bg-[#1E7A8A]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <Maximize2 className="text-white w-8 h-8" />
@@ -92,13 +88,13 @@ export const Gallery: React.FC = () => {
               key={selectedIdx}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="max-w-5xl max-h-[85vh] flex flex-col items-center"
+              className="max-w-5xl max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <img 
                 src={GALLERY[selectedIdx].url} 
                 alt={GALLERY[selectedIdx].alt} 
-                className="max-w-full max-h-[75vh] object-contain shadow-2xl rounded-sm"
+                className="w-full h-full object-contain shadow-2xl rounded-sm"
               />
               <div className="mt-4 text-center">
                 <p className="text-[#D4AF37] text-sm uppercase tracking-widest">{GALLERY[selectedIdx].alt}</p>

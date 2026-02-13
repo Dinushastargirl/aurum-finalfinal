@@ -1,6 +1,4 @@
 
-"use client";
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { HERO_BG, FRESHA_LINK } from '../constants';
