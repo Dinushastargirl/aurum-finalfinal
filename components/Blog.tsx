@@ -1,3 +1,4 @@
+"use client";
 
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -22,15 +23,17 @@ export const Blog: React.FC = () => {
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true }}
               className="group cursor-pointer"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-sm mb-6">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-sm mb-6 bg-[#3A3A3A]">
                 <img 
                   src={post.image} 
                   alt={post.title} 
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  loading="lazy"
                 />
                 <div className="absolute top-6 left-6 px-4 py-1 bg-[#D4AF37] text-[#2E2E2E] text-[10px] uppercase font-bold tracking-widest">
                   {post.category}

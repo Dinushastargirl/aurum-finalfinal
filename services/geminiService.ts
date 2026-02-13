@@ -1,7 +1,4 @@
-
 import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
 const SYSTEM_INSTRUCTION = `
 You are the assistant for AURUM STUDIO, a premium salon in Rajagiriya, Sri Lanka.
@@ -17,25 +14,27 @@ You handle questions about:
 - Location: We are located in Rajagiriya at 121, 1 Parliament Rd.
 
 RULES:
-- Use clear, simple English. Avoid fancy words like "bespoke".
-- Keep replies under 60 words.
+- Use clear, simple English.
+- Keep replies under 80 words.
 - Be warm and welcoming.
 `;
 
 export async function getChatResponse(prompt: string) {
   try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: prompt,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        maxOutputTokens: 100,
+        maxOutputTokens: 200,
         temperature: 0.7,
       },
     });
+    
     return response.text || "I'm sorry, I can't answer that right now. Please call us at +94 77 751 2222.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Thank you for message. Please call our studio at +94 77 751 2222 for help.";
+    return "Thank you for your message. Please call our studio at +94 77 751 2222 for immediate help.";
   }
 }

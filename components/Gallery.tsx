@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -38,12 +39,13 @@ export const Gallery: React.FC = () => {
               transition={{ duration: 0.5, delay: idx * 0.05 }}
               viewport={{ once: true }}
               onClick={() => setSelectedIdx(idx)}
-              className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg shadow-lg"
+              className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg shadow-lg bg-[#3A3A3A]"
             >
               <img 
                 src={img.url} 
                 alt={img.alt} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-[#1E7A8A]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <Maximize2 className="text-white w-8 h-8" />
@@ -88,13 +90,13 @@ export const Gallery: React.FC = () => {
               key={selectedIdx}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="max-w-5xl max-h-[85vh]"
+              className="max-w-5xl max-h-[85vh] flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
               <img 
                 src={GALLERY[selectedIdx].url} 
                 alt={GALLERY[selectedIdx].alt} 
-                className="w-full h-full object-contain shadow-2xl rounded-sm"
+                className="max-w-full max-h-[75vh] object-contain shadow-2xl rounded-sm"
               />
               <div className="mt-4 text-center">
                 <p className="text-[#D4AF37] text-sm uppercase tracking-widest">{GALLERY[selectedIdx].alt}</p>
