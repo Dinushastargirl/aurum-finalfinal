@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 
 const rootElement = document.getElementById('root');
+
 if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-} else {
-  console.error("Critical Error: Root element not found.");
+  try {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  } catch (error) {
+    console.error("Mounting Error:", error);
+    rootElement.innerHTML = `<div style="display:flex; height:100vh; align-items:center; justify-content:center; color:#D4AF37;">Application failed to start.</div>`;
+  }
 }

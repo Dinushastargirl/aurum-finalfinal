@@ -1,8 +1,7 @@
-"use client";
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TEAM } from '../constants';
+import { TEAM, COLORS } from '../constants';
 
 const TeamCard: React.FC<{ member: typeof TEAM[0], index: number }> = ({ member, index }) => {
   return (
@@ -14,12 +13,11 @@ const TeamCard: React.FC<{ member: typeof TEAM[0], index: number }> = ({ member,
       whileHover={{ scale: 1.05 }}
       className="bg-[#3A3A3A] rounded-2xl overflow-hidden shadow-xl border border-white/5 group"
     >
-      <div className="relative h-96 overflow-hidden bg-[#2E2E2E]">
+      <div className="relative h-96 overflow-hidden">
         <img 
           src={member.image} 
           alt={member.name} 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>

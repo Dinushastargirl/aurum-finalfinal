@@ -1,6 +1,4 @@
 
-"use client";
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { HERO_BG, FRESHA_LINK } from '../constants';
@@ -11,9 +9,8 @@ export const Hero: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigat
   
   return (
     <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-      {/* Background with priority loading simulation */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-[15s] hover:scale-110"
         style={{ backgroundImage: `url(${HERO_BG})` }}
       >
         <div className="absolute inset-0 bg-black/60" />
@@ -29,11 +26,11 @@ export const Hero: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigat
             <motion.span
               key={i}
               variants={{
-                hidden: { opacity: 0, y: 50, scale: 0.5 },
+                hidden: { opacity: 0, y: 20, scale: 0.5 },
                 visible: { opacity: 1, y: 0, scale: 1 }
               }}
-              transition={{ delay: i * 0.1, duration: 0.6, ease: "easeOut" }}
-              className={`text-4xl md:text-8xl font-serif tracking-tighter ${char === " " ? "mr-4" : ""} text-white drop-shadow-2xl`}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className={`text-4xl md:text-8xl font-serif tracking-tighter ${char === " " ? "mr-4" : ""} text-white drop-shadow-[0_0_15px_rgba(212,175,55,0.5)]`}
               style={{ color: i > 5 ? '#D4AF37' : 'white' }}
             >
               {char}
@@ -42,9 +39,9 @@ export const Hero: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigat
         </motion.div>
 
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
           className="text-lg md:text-2xl text-white/90 max-w-3xl font-light tracking-[0.3em] uppercase mb-12"
         >
           Premium Beauty Care in Rajagiriya
@@ -53,7 +50,7 @@ export const Hero: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigat
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
+          transition={{ delay: 2, duration: 0.8 }}
           className="flex flex-col md:flex-row gap-6"
         >
           <a 
@@ -62,15 +59,15 @@ export const Hero: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigat
             rel="noopener noreferrer"
             className="group relative px-12 py-5 overflow-hidden rounded-sm"
           >
-            <div className="absolute inset-0 bg-[#D4AF37] transition-transform duration-500 group-hover:scale-110" />
-            <span className="relative text-[#2E2E2E] font-bold tracking-[0.2em] uppercase">Book Your Service</span>
+            <div className="absolute inset-0 bg-[#D4AF37] transition-transform duration-500 group-hover:scale-105" />
+            <span className="relative text-[#2E2E2E] font-bold tracking-[0.2em] uppercase">Book Now</span>
           </a>
           
           <button 
             onClick={() => onNavigate('gallery')}
             className="px-12 py-5 border border-white/30 hover:border-[#D4AF37] hover:text-[#D4AF37] text-white font-medium tracking-[0.2em] uppercase transition-all duration-300 rounded-sm"
           >
-            Explore Gallery
+            See Our Work
           </button>
         </motion.div>
       </div>
@@ -80,7 +77,7 @@ export const Hero: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigat
         transition={{ repeat: Infinity, duration: 2.5 }}
         className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 opacity-40"
       >
-        <span className="text-[9px] uppercase tracking-[0.5em]">Scroll to Discover</span>
+        <span className="text-[9px] uppercase tracking-[0.5em]">Scroll Down</span>
         <div className="w-[1px] h-16 bg-gradient-to-b from-white to-transparent" />
       </motion.div>
     </section>

@@ -2,19 +2,19 @@ import { GoogleGenAI } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
 You are the assistant for AURUM STUDIO, a premium salon in Rajagiriya, Sri Lanka.
-Your tone is friendly, polite, and helpful.
+Your tone is friendly, polite, and professional.
 
 Location: 121, 1 Parliament Rd, Rajagiriya.
 Phone: +94 77 751 2222
 Email: aurumstudioslk@gmail.com
 
-You handle questions about pricing, booking, and beauty services.
-Keep replies polite, warm, and luxury-toned.
+Services: Hair styling, skin care, makeup, nails, and grooming.
+Booking: Instruct users to click the "Book Now" button on our website.
 
 RULES:
-- Use clear English.
-- Keep replies under 80 words.
-- Suggest clicking the "Book Now" button for direct appointments.
+- Use clear, professional English.
+- Keep replies under 75 words.
+- Be warm and welcoming.
 `;
 
 export async function getChatResponse(prompt: string) {
@@ -30,10 +30,10 @@ export async function getChatResponse(prompt: string) {
       },
     });
     
-    // Accessing .text property directly as per latest guidelines
-    return response.text || "I'm sorry, I'm having trouble responding. Please call us at +94 77 751 2222.";
+    // Explicitly use .text property as per latest SDK guidelines
+    return response.text || "I'm sorry, I'm having a bit of trouble right now. Please call us at +94 77 751 2222.";
   } catch (error) {
-    console.error("Gemini Error:", error);
-    return "Thank you for reaching out. Please call our studio directly at +94 77 751 2222 for help.";
+    console.error("Gemini API Error:", error);
+    return "Thank you for reaching out. For immediate assistance, please call Aurum Studio at +94 77 751 2222.";
   }
 }

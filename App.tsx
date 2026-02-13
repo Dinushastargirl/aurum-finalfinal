@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -12,8 +12,44 @@ import { Chatbot } from './components/Chatbot';
 import { CustomCursor } from './components/CustomCursor';
 import { Page } from './types';
 import { FRESHA_LINK, GALLERY, BLOG_POSTS, REVIEWS } from './constants';
-import { Star, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, AlertTriangle } from 'lucide-react';
 
+// --- Error Boundary ---
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("App Crash:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-[#2E2E2E] flex flex-col items-center justify-center p-6 text-center">
+          <AlertTriangle className="text-[#D4AF37] mb-4" size={48} />
+          <h1 className="text-2xl font-serif text-white mb-2">Something went wrong</h1>
+          <p className="text-white/60 mb-6">Our studio assistant is looking into it.</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-8 py-3 bg-[#D4AF37] text-[#2E2E2E] font-bold tracking-widest uppercase rounded-sm"
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// --- Navigation ---
 const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> = ({ currentPage, onNavigate }) => {
   const navItems: { id: Page; label: string }[] = [
     { id: 'about', label: 'About Us' },
@@ -27,18 +63,12 @@ const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> 
     <motion.nav 
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed top-0 left-0 w-full z-[8000] px-6 md:px-12 py-6 md:py-8 flex justify-between items-center bg-black/80 backdrop-blur-md border-b border-white/5"
+      className="fixed top-0 left-0 w-full z-[8000] px-6 md:px-12 py-6 md:py-8 flex justify-between items-center bg-black/80 backdrop-blur-lg border-b border-white/5"
     >
-      <div 
-        onClick={() => onNavigate('home')}
-        className="cursor-pointer group"
-      >
-        <motion.span 
-          whileHover={{ scale: 1.02 }}
-          className="text-xl md:text-2xl font-serif tracking-[0.2em] text-[#D4AF37]"
-        >
+      <div onClick={() => onNavigate('home')} className="cursor-pointer group">
+        <span className="text-xl md:text-2xl font-serif tracking-[0.2em] text-[#D4AF37]">
           AURUM <span className="text-white opacity-80 group-hover:opacity-100 transition-opacity">STUDIO</span>
-        </motion.span>
+        </span>
       </div>
 
       <div className="hidden lg:flex gap-10 items-center">
@@ -56,20 +86,19 @@ const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> 
         ))}
       </div>
 
-      <div className="flex items-center gap-4">
-        <a 
-          href={FRESHA_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-5 py-2 border border-[#D4AF37] text-[#D4AF37] text-[10px] uppercase font-bold tracking-[0.2em] hover:bg-[#D4AF37] hover:text-[#2E2E2E] transition-all duration-300 rounded-sm"
-        >
-          Book Now
-        </a>
-      </div>
+      <a 
+        href={FRESHA_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-5 py-2 border border-[#D4AF37] text-[#D4AF37] text-[10px] uppercase font-bold tracking-[0.2em] hover:bg-[#D4AF37] hover:text-[#2E2E2E] transition-all duration-300 rounded-sm"
+      >
+        Book Now
+      </a>
     </motion.nav>
   );
 };
 
+// --- Footer ---
 const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) => (
   <footer className="py-24 bg-black text-center border-t border-white/5">
     <div className="max-w-7xl mx-auto px-6">
@@ -87,118 +116,144 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
   </footer>
 );
 
+// --- Main App Component ---
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Clean up loading overlay if it exists in the DOM
-    const overlay = document.querySelector('.loading-overlay');
-    if (overlay) overlay.remove();
-    
-    if (typeof window !== 'undefined') {
-      document.body.classList.add('custom-cursor-active');
+    setIsMounted(true);
+    // Remove the initial static loader
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      loader.style.opacity = '0';
+      setTimeout(() => loader.remove(), 500);
     }
   }, []);
 
   const handleNavigate = (page: Page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const renderPage = () => {
-    switch(currentPage) {
-      case 'home': return <Hero onNavigate={handleNavigate} />;
-      case 'about': return <About />;
-      case 'team': return <Team />;
-      case 'gallery': return <Gallery />;
-      case 'blog': return <Blog />;
-      case 'contact': return <Contact />;
-      default: return <Hero onNavigate={handleNavigate} />;
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
+  const renderPage = () => {
+    if (!isMounted) return null;
+
+    try {
+      switch(currentPage) {
+        case 'home': return <Hero onNavigate={handleNavigate} />;
+        case 'about': return <About />;
+        case 'team': return <Team />;
+        case 'gallery': return <Gallery />;
+        case 'blog': return <Blog />;
+        case 'contact': return <Contact />;
+        default: return <Hero onNavigate={handleNavigate} />;
+      }
+    } catch (err) {
+      console.error("Page Render Error:", err);
+      return <Hero onNavigate={handleNavigate} />;
+    }
+  };
+
+  if (!isMounted) {
+    return null; // Let the initial static loader show
+  }
+
   return (
-    <div className="relative min-h-screen bg-[#2E2E2E] selection:bg-[#D4AF37] selection:text-[#2E2E2E]">
-      <CustomCursor />
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
+    <ErrorBoundary>
+      <div className="relative min-h-screen bg-[#2E2E2E] selection:bg-[#D4AF37] selection:text-[#2E2E2E]">
+        <CustomCursor />
+        <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentPage}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {renderPage()}
-          
-          {currentPage === 'home' && (
-            <div className="bg-[#2E2E2E]">
-              <About />
-              <div className="py-24 bg-[#252525]">
-                <div className="max-w-7xl mx-auto px-6">
-                  <div className="flex justify-between items-end mb-12">
-                    <div>
-                      <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Portfolio</h2>
-                      <h3 className="text-4xl font-serif">Featured Work</h3>
-                    </div>
-                    <button 
-                      onClick={() => handleNavigate('gallery')}
-                      className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] flex items-center gap-2 group border-b border-[#D4AF37]/30 pb-1"
-                    >
-                      View More <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {GALLERY.slice(0, 4).map((img, idx) => (
-                      <motion.div 
-                        key={idx} 
-                        whileHover={{ y: -5 }}
-                        className="aspect-square rounded-lg overflow-hidden shadow-2xl bg-[#3A3A3A]"
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {renderPage()}
+            
+            {currentPage === 'home' && (
+              <div className="bg-[#2E2E2E]">
+                <About />
+                
+                {/* Home Gallery Preview */}
+                <div className="py-24 bg-[#252525]">
+                  <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex justify-between items-end mb-12">
+                      <div>
+                        <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Portfolio</h2>
+                        <h3 className="text-4xl font-serif">Featured Work</h3>
+                      </div>
+                      <button 
+                        onClick={() => handleNavigate('gallery')}
+                        className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] flex items-center gap-2 group border-b border-[#D4AF37]/30 pb-1"
                       >
-                        <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
-                      </motion.div>
-                    ))}
+                        View More <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {GALLERY && GALLERY.length > 0 ? GALLERY.slice(0, 4).map((img, idx) => (
+                        <motion.div 
+                          key={idx} 
+                          whileHover={{ y: -5 }}
+                          className="aspect-square rounded-lg overflow-hidden shadow-2xl bg-[#3A3A3A]"
+                        >
+                          <img 
+                            src={img.url} 
+                            alt={img.alt} 
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+                          />
+                        </motion.div>
+                      )) : <div className="col-span-4 text-center text-white/20">Gallery loading...</div>}
+                    </div>
+                  </div>
+                </div>
+
+                <Team />
+
+                {/* Home Testimonials Preview */}
+                <div className="py-24 bg-black/20">
+                  <div className="max-w-7xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                      <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Testimonials</h2>
+                      <h3 className="text-4xl md:text-5xl font-serif mb-6">Client Experience</h3>
+                      <div className="flex justify-center gap-1.5">
+                        {[...Array(5)].map((_, i) => <Star key={i} size={18} className="fill-[#D4AF37] text-[#D4AF37]" />)}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                      {REVIEWS && REVIEWS.map((review, idx) => (
+                        <motion.div 
+                          key={idx} 
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          className="bg-[#3A3A3A] p-10 rounded-lg border border-white/5 shadow-2xl"
+                        >
+                          <p className="text-white/80 italic mb-8 font-light">"{review.text}"</p>
+                          <div className="flex justify-between items-center border-t border-white/5 pt-6">
+                            <span className="font-semibold text-sm tracking-widest uppercase">{review.name}</span>
+                            <span className="text-white/20 text-[10px] uppercase">{review.date}</span>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-              <Team />
-              <div className="py-24 bg-black/20">
-                <div className="max-w-7xl mx-auto px-6">
-                  <div className="text-center mb-16">
-                    <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Testimonials</h2>
-                    <h3 className="text-4xl md:text-5xl font-serif mb-6">Client Experience</h3>
-                    <div className="flex justify-center gap-1.5">
-                      {[...Array(5)].map((_, i) => <Star key={i} size={18} className="fill-[#D4AF37] text-[#D4AF37]" />)}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    {REVIEWS.map((review, idx) => (
-                      <motion.div 
-                        key={idx} 
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="bg-[#3A3A3A] p-10 rounded-lg border border-white/5 shadow-2xl"
-                      >
-                        <p className="text-white/80 italic mb-8 font-light">"{review.text}"</p>
-                        <div className="flex justify-between items-center border-t border-white/5 pt-6">
-                          <span className="font-semibold text-sm tracking-widest uppercase">{review.name}</span>
-                          <span className="text-white/20 text-[10px] uppercase">{review.date}</span>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </motion.div>
-      </AnimatePresence>
+            )}
+          </motion.div>
+        </AnimatePresence>
 
-      <Footer onNavigate={handleNavigate} />
-      <Chatbot />
-    </div>
+        <Footer onNavigate={handleNavigate} />
+        <Chatbot />
+      </div>
+    </ErrorBoundary>
   );
 };
 
