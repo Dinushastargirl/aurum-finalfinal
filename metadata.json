@@ -1,0 +1,8 @@
+{
+  "name": "AURUM STUDIO - Luxury Salon",
+  "description": "A premium, animated, and interactive website for Aurum Studio, featuring custom cursor effects, an AI-powered salon assistant, and elegant gallery experiences.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
