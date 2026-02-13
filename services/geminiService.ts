@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
@@ -15,14 +14,14 @@ Keep replies polite, warm, and luxury-toned.
 RULES:
 - Use clear English.
 - Keep replies under 80 words.
-- If unsure about booking, suggest clicking the "Book Now" button.
+- Suggest clicking the "Book Now" button for direct appointments.
 `;
 
 export async function getChatResponse(prompt: string) {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-exp', // Using the latest high-performance model
+      model: 'gemini-3-flash-preview',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -31,10 +30,10 @@ export async function getChatResponse(prompt: string) {
       },
     });
     
-    // Correctly using the .text property as per standard
+    // Accessing .text property directly as per latest guidelines
     return response.text || "I'm sorry, I'm having trouble responding. Please call us at +94 77 751 2222.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Thank you for reaching out. Please call our studio directly at +94 77 751 2222 for immediate assistance.";
+    return "Thank you for reaching out. Please call our studio directly at +94 77 751 2222 for help.";
   }
 }
