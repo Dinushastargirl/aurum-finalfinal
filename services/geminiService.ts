@@ -24,16 +24,17 @@ export async function getChatResponse(prompt: string) {
   try {
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
-      throw new Error("API Key not found");
+      console.error("Gemini API key is missing");
+      return "I'm having trouble connecting to my brain. Please call us at +94 77 751 2222.";
     }
     
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: prompt,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        maxOutputTokens: 100,
+        maxOutputTokens: 200,
         temperature: 0.7,
       },
     });

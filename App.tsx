@@ -1,4 +1,5 @@
 
+"use client";
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Hero } from './components/Hero';
@@ -84,11 +85,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
-    document.getElementById('root')?.classList.add('loaded');
+    if (typeof document !== 'undefined') {
+      document.getElementById('root')?.classList.add('loaded');
+    }
   }, []);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [currentPage, mounted]);
@@ -97,7 +100,7 @@ const App: React.FC = () => {
     setCurrentPage(page);
   };
 
-  if (!mounted) return <div className="min-h-screen bg-[#2E2E2E]" />;
+  if (!mounted) return <div className="min-h-screen bg-[#2E2E2E] flex items-center justify-center"><div className="w-12 h-12 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div></div>;
 
   const renderPage = () => {
     switch(currentPage) {
