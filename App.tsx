@@ -27,7 +27,7 @@ const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> 
     <motion.nav 
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed top-0 left-0 w-full z-[8000] px-6 md:px-12 py-6 md:py-8 flex justify-between items-center bg-black/60 backdrop-blur-xl border-b border-white/5"
+      className="fixed top-0 left-0 w-full z-[8000] px-6 md:px-12 py-6 md:py-8 flex justify-between items-center bg-black/80 backdrop-blur-md border-b border-white/5"
     >
       <div 
         onClick={() => onNavigate('home')}
@@ -71,7 +71,7 @@ const Navbar: React.FC<{ currentPage: Page, onNavigate: (page: Page) => void }> 
 };
 
 const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) => (
-  <footer className="py-24 bg-black/95 text-center border-t border-white/5">
+  <footer className="py-24 bg-black text-center border-t border-white/5">
     <div className="max-w-7xl mx-auto px-6">
       <h2 className="text-3xl font-serif text-[#D4AF37] mb-4 tracking-[0.2em]">AURUM STUDIO</h2>
       <p className="text-white/40 text-[10px] uppercase tracking-[0.5em] mb-12">1 Parliament Rd, Rajagiriya</p>
@@ -81,7 +81,7 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
         ))}
       </div>
       <p className="text-white/20 text-[9px] tracking-[0.4em] uppercase">
-        © {new Date().getFullYear()} Aurum Studio. Luxury & Excellence.
+        © {new Date().getFullYear()} Aurum Studio. High Excellence Beauty.
       </p>
     </div>
   </footer>
@@ -89,38 +89,21 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Clean up loading overlay if it exists in the DOM
+    const overlay = document.querySelector('.loading-overlay');
+    if (overlay) overlay.remove();
+    
     if (typeof window !== 'undefined') {
       document.body.classList.add('custom-cursor-active');
     }
   }, []);
 
-  useEffect(() => {
-    if (mounted) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [currentPage, mounted]);
-
   const handleNavigate = (page: Page) => {
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[#2E2E2E] flex items-center justify-center">
-        <motion.div 
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className="text-[#D4AF37] font-serif text-3xl tracking-widest"
-        >
-          AURUM
-        </motion.div>
-      </div>
-    );
-  }
 
   const renderPage = () => {
     switch(currentPage) {
@@ -142,19 +125,16 @@ const App: React.FC = () => {
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPage}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
         >
           {renderPage()}
           
           {currentPage === 'home' && (
-            <>
-              <div className="py-20 border-t border-white/5">
-                <About />
-              </div>
-
+            <div className="bg-[#2E2E2E]">
+              <About />
               <div className="py-24 bg-[#252525]">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="flex justify-between items-end mb-12">
@@ -173,23 +153,16 @@ const App: React.FC = () => {
                     {GALLERY.slice(0, 4).map((img, idx) => (
                       <motion.div 
                         key={idx} 
-                        whileHover={{ y: -10 }}
+                        whileHover={{ y: -5 }}
                         className="aspect-square rounded-lg overflow-hidden shadow-2xl bg-[#3A3A3A]"
                       >
-                        <img 
-                          src={img.url} 
-                          alt={img.alt} 
-                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
-                          loading="lazy"
-                        />
+                        <img src={img.url} alt={img.alt} className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
                       </motion.div>
                     ))}
                   </div>
                 </div>
               </div>
-
               <Team />
-
               <div className="py-24 bg-black/20">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="text-center mb-16">
@@ -206,22 +179,19 @@ const App: React.FC = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-[#3A3A3A] p-10 rounded-lg border border-white/5 shadow-2xl relative"
+                        className="bg-[#3A3A3A] p-10 rounded-lg border border-white/5 shadow-2xl"
                       >
-                        <div className="flex gap-1 mb-6">
-                          {[...Array(review.rating)].map((_, i) => <Star key={i} size={14} className="fill-[#D4AF37] text-[#D4AF37]" />)}
-                        </div>
-                        <p className="text-white/80 italic mb-8 leading-relaxed font-light">"{review.text}"</p>
+                        <p className="text-white/80 italic mb-8 font-light">"{review.text}"</p>
                         <div className="flex justify-between items-center border-t border-white/5 pt-6">
                           <span className="font-semibold text-sm tracking-widest uppercase">{review.name}</span>
-                          <span className="text-white/20 text-[10px] uppercase tracking-widest">{review.date}</span>
+                          <span className="text-white/20 text-[10px] uppercase">{review.date}</span>
                         </div>
                       </motion.div>
                     ))}
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </motion.div>
       </AnimatePresence>

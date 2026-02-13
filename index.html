@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURUM STUDIO | Preview</title>
+    <title>AURUM STUDIO | Premium Salon & Artistry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -17,6 +17,8 @@
     "@google/genai": "https://esm.sh/@google/genai@0.21.0",
     "lucide-react": "https://esm.sh/lucide-react@0.475.0",
     "framer-motion": "https://esm.sh/framer-motion@12.4.2",
+    "clsx": "https://esm.sh/clsx@2.1.1",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@2.5.2",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
     "next": "https://esm.sh/next@^16.1.6"
@@ -27,13 +29,29 @@
         body {
           background-color: #2E2E2E;
           margin: 0;
+          padding: 0;
           color: white;
+          overflow-x: hidden;
         }
         #root { min-height: 100vh; }
+        /* Prevent layout shift before React mounts */
+        .loading-overlay {
+          position: fixed;
+          inset: 0;
+          background: #2E2E2E;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <div class="loading-overlay">
+            <div style="font-family: 'Playfair Display', serif; color: #D4AF37; font-size: 2rem; letter-spacing: 0.5em;">AURUM</div>
+        </div>
+    </div>
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
