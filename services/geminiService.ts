@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
@@ -8,22 +9,20 @@ Location: 121, 1 Parliament Rd, Rajagiriya.
 Phone: +94 77 751 2222
 Email: aurumstudioslk@gmail.com
 
-You handle questions about:
-- Services: Hair styling, skin care, makeup, nails, and grooming.
-- Booking: Tell users to click the "Book Now" button or visit our Fresha page.
-- Location: We are located in Rajagiriya at 121, 1 Parliament Rd.
+You handle questions about pricing, booking, and beauty services.
+Keep replies polite, warm, and luxury-toned.
 
 RULES:
-- Use clear, simple English.
+- Use clear English.
 - Keep replies under 80 words.
-- Be warm and welcoming.
+- If unsure about booking, suggest clicking the "Book Now" button.
 `;
 
 export async function getChatResponse(prompt: string) {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.0-flash-exp', // Using the latest high-performance model
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -32,9 +31,10 @@ export async function getChatResponse(prompt: string) {
       },
     });
     
-    return response.text || "I'm sorry, I can't answer that right now. Please call us at +94 77 751 2222.";
+    // Correctly using the .text property as per standard
+    return response.text || "I'm sorry, I'm having trouble responding. Please call us at +94 77 751 2222.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Thank you for your message. Please call our studio at +94 77 751 2222 for immediate help.";
+    return "Thank you for reaching out. Please call our studio directly at +94 77 751 2222 for immediate assistance.";
   }
 }

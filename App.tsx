@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -81,7 +82,7 @@ const Footer: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) 
         ))}
       </div>
       <p className="text-white/20 text-[9px] tracking-[0.4em] uppercase">
-        © {new Date().getFullYear()} Aurum Studio. Developed for Premium Excellence.
+        © {new Date().getFullYear()} Aurum Studio. High Excellence Beauty.
       </p>
     </div>
   </footer>
@@ -93,6 +94,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined') {
+      document.body.classList.add('custom-cursor-active');
+    }
   }, []);
 
   useEffect(() => {
@@ -139,24 +143,23 @@ const App: React.FC = () => {
           
           {currentPage === 'home' && (
             <>
-              {/* Home - About Section */}
+              {/* Home Sections */}
               <div className="py-20 border-t border-white/5">
                 <About />
               </div>
 
-              {/* Home - Gallery Highlight */}
               <div className="py-24 bg-[#252525]">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="flex justify-between items-end mb-12">
                     <div>
                       <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Portfolio</h2>
-                      <h3 className="text-4xl font-serif">Our Best Styles</h3>
+                      <h3 className="text-4xl font-serif">Featured Work</h3>
                     </div>
                     <button 
                       onClick={() => handleNavigate('gallery')}
                       className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] flex items-center gap-2 group border-b border-[#D4AF37]/30 pb-1"
                     >
-                      Explore Gallery <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      View More <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -178,17 +181,15 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Home - Team Section */}
               <div className="py-20 bg-black/10">
                 <Team />
               </div>
 
-              {/* Home - Blog Highlight */}
               <div className="py-24 bg-[#2E2E2E]">
                 <div className="max-w-7xl mx-auto px-6">
                    <div className="flex justify-between items-end mb-12">
                     <div>
-                      <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Latest</h2>
+                      <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Journal</h2>
                       <h3 className="text-4xl font-serif">The Beauty Blog</h3>
                     </div>
                     <button 
@@ -216,12 +217,11 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Home - Reviews Section */}
               <div className="py-24 bg-black/20">
                 <div className="max-w-7xl mx-auto px-6">
                   <div className="text-center mb-16">
                     <h2 className="text-sm uppercase tracking-[0.5em] text-[#D4AF37] mb-4">Testimonials</h2>
-                    <h3 className="text-4xl md:text-5xl font-serif mb-6">Client Love</h3>
+                    <h3 className="text-4xl md:text-5xl font-serif mb-6">Client Experience</h3>
                     <div className="flex justify-center gap-1.5">
                       {[...Array(5)].map((_, i) => <Star key={i} size={18} className="fill-[#D4AF37] text-[#D4AF37]" />)}
                     </div>
@@ -246,16 +246,6 @@ const App: React.FC = () => {
                         </div>
                       </motion.div>
                     ))}
-                  </div>
-                  <div className="text-center mt-16">
-                    <a 
-                      href={GOOGLE_REVIEWS_LINK}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-3 text-[#D4AF37] text-xs uppercase tracking-[0.3em] hover:text-white transition-all group"
-                    >
-                      Verified Google Reviews <ExternalLink size={14} className="group-hover:translate-y-[-2px] transition-transform" />
-                    </a>
                   </div>
                 </div>
               </div>

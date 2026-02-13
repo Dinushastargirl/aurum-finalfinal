@@ -1,3 +1,4 @@
+
 {
   "name": "aurum-studio",
   "version": "1.0.0",
@@ -11,10 +12,10 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.7",
+    "next": "^15.1.7",
     "framer-motion": "^12.4.2",
     "lucide-react": "^0.475.0",
-    "@google/genai": "*",
+    "@google/genai": "^0.21.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.2"
   },
