@@ -24,24 +24,24 @@ export async function getChatResponse(prompt: string) {
   try {
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
-      console.error("Gemini API key is missing");
-      return "I'm having trouble connecting to my brain. Please call us at +94 77 751 2222.";
+      console.error("Gemini API key is not configured.");
+      return "I'm currently resting. Please call us at +94 77 751 2222 for help.";
     }
-    
+
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        maxOutputTokens: 200,
+        maxOutputTokens: 150,
         temperature: 0.7,
       },
     });
-    
+
     return response.text || "I'm sorry, I can't answer that right now. Please call us at +94 77 751 2222.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Thank you for your message. Please call our studio at +94 77 751 2222 for immediate help.";
+    return "Thank you for message. Please call our studio at +94 77 751 2222 for help.";
   }
 }

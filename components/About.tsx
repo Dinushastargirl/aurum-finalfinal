@@ -1,4 +1,6 @@
 
+"use client";
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ABOUT_IMAGES, COLORS } from '../constants';
@@ -18,15 +20,19 @@ export const About: React.FC = () => {
           <div className="pt-12">
             <img 
               src={ABOUT_IMAGES[0]} 
-              alt="Aurum Studio Service" 
+              alt="Professional hair styling session at Aurum Studio" 
               className="rounded-lg shadow-2xl hover:scale-[1.02] transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div>
             <img 
               src={ABOUT_IMAGES[1]} 
-              alt="Aurum Studio Interior" 
+              alt="Modern and elegant interior of Aurum Studio Rajagiriya" 
               className="rounded-lg shadow-2xl hover:scale-[1.02] transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </motion.div>
