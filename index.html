@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURUM STUDIO | Premium Salon & Artistry</title>
-    <meta name="description" content="Premium beauty services in Rajagiriya. Hair, Skin, and Bridal styling.">
+    <title>AURUM STUDIO | Premium Salon & Hair Artistry Rajagiriya</title>
+    <meta name="description" content="Visit Aurum Studio in Rajagiriya for high-quality hair styling, skin care, and bridal makeup.">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,34 +33,34 @@
             color: white;
             margin: 0;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
-        .loading-overlay {
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        ::selection {
+            background: #D4AF37;
+            color: #2E2E2E;
+        }
+        /* Initial simple loader to prevent grey screen while React downloads */
+        #root:empty::before {
+            content: 'AURUM';
             position: fixed;
             inset: 0;
-            background: #2E2E2E;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out;
+            font-family: 'Playfair Display', serif;
+            color: #D4AF37;
+            font-size: 2rem;
+            letter-spacing: 0.5em;
+            background: #2E2E2E;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
-    <div id="root">
-        <div class="loading-overlay" id="initial-loader">
-            <div style="font-family: 'Playfair Display', serif; color: #D4AF37; font-size: 2.5rem; letter-spacing: 0.5em; animation: pulse 2s infinite;">AURUM</div>
-        </div>
-    </div>
+    <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
-    <script>
-        window.onerror = function(msg, url, line) {
-            console.error("Global error: " + msg + " at " + url + ":" + line);
-            const loader = document.getElementById('initial-loader');
-            if (loader) {
-                loader.innerHTML = '<div style="color: #D4AF37; font-size: 14px; text-align: center; padding: 20px;">An error occurred while loading the application.<br/>Please refresh the page.</div>';
-            }
-        };
-    </script>
 </body>
 </html>
